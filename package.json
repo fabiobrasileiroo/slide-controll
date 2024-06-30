@@ -1,0 +1,26 @@
+{
+  "name": "slide-controll",
+  "version": "1.0.0",
+  "main": "index.js",
+   "engines": {
+    "node": "16.20.2"
+  }, 
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@abandonware/bleno": "^0.6.1",
+    "bluetooth-serial-port": "^3.0.2",
+    "express": "^4.19.2",
+    "robotjs": "^0.6.0",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "@types/bleno": "^0.4.6"
+  },
+  "description": ""
+}

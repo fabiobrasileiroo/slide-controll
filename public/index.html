@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controlador de Slides</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <h1>Controlador de Slides</h1>
+    <button id="next">Próximo Slide</button>
+    <button id="prev">Slide Anterior</button>
+
+    <script>
+        const socket = io();
+
+        document.getElementById('next').addEventListener('click', () => {
+            socket.emit('slide', 'next');
+        });
+
+        document.getElementById('prev').addEventListener('click', () => {
+            socket.emit('slide', 'prev');
+        });
+    </script>
+</body>
+</html>

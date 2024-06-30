@@ -1,0 +1,1 @@
+## servidor de controle de slide para passar de slide para outro offline sendo usaro roteador do celular sem internet para passar os slide
