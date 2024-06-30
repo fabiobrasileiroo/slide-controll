@@ -4,7 +4,6 @@ const socketIo = require('socket.io');
 const path = require('path');
 const robot = require('robotjs');
 
-
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -14,21 +13,32 @@ const PORT = process.env.PORT || 3000;
 // Servir página estática
 app.use(express.static(path.join(__dirname, '/public')));
 
-// Endpoint para receber comandos de slide via WebSocket
 io.on('connection', (socket) => {
     console.log('Novo cliente conectado');
 
     socket.on('slide', (command) => {
         console.log('Comando recebido:', command);
 
-        // Implementar lógica para avançar ou retroceder slides com teclas simuladas
-        if (command === 'next') {
-            // Simular pressionamento de tecla para avançar slide (tecla da direita)
-            robot.keyTap('right');
-        } else if (command === 'prev') {
-            // Simular pressionamento de tecla para retroceder slide (tecla da esquerda)
-            robot.keyTap('left');
+        switch (command) {
+            case 'next':
+                robot.keyTap('right');
+                break;
+            case 'prev':
+                robot.keyTap('left');
+                break;
+            case 'first':
+                robot.keyTap('home');
+                break;
+            case 'last':
+                robot.keyTap('end');
+                break;
         }
+    });
+
+    socket.on('mouseMove', (movement) => {
+        console.log('Movimento do mouse recebido:', movement);
+        const mouse = robot.getMousePos();
+        robot.moveMouse(mouse.x + movement.deltaX, mouse.y + movement.deltaY);
     });
 
     socket.on('disconnect', () => {
