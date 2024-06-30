@@ -2,7 +2,7 @@
 
 ### use a version 16 do node
 ```
-nvm install 16 | nvm use 16
+nvm install 16 || nvm use 16
 ```
 
 ```
