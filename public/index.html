@@ -1,26 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controlador de Slides</title>
-    <script src="/socket.io/socket.io.js"></script>
-</head>
-<body>
-    <h1>Controlador de Slides</h1>
-    <button id="next">Próximo Slide</button>
-    <button id="prev">Slide Anterior</button>
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+const path = require('path');
+const robot = require('robotjs');
 
-    <script>
-        const socket = io();
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
-        document.getElementById('next').addEventListener('click', () => {
-            socket.emit('slide', 'next');
-        });
+const PORT = process.env.PORT || 3000;
 
-        document.getElementById('prev').addEventListener('click', () => {
-            socket.emit('slide', 'prev');
-        });
-    </script>
-</body>
-</html>
+// Servir página estática
+app.use(express.static(path.join(__dirname, '/public')));
+
+io.on('connection', (socket) => {
+    console.log('Novo cliente conectado');
+
+    socket.on('slide', (command) => {
+        console.log('Comando recebido:', command);
+
+        switch (command) {
+            case 'next':
+                robot.keyTap('right');
+                break;
+            case 'prev':
+                robot.keyTap('left');
+                break;
+            case 'first':
+                robot.keyTap('home');
+                break;
+            case 'last':
+                robot.keyTap('end');
+                break;
+        }
+    });
+
+    socket.on('mouseMove', (movement) => {
+        console.log('Movimento do mouse recebido:', movement);
+        const mouse = robot.getMousePos();
+        robot.moveMouse(mouse.x + movement.deltaX, mouse.y + movement.deltaY);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Cliente desconectado');
+    });
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
